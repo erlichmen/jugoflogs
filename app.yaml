@@ -1,0 +1,28 @@
+application: jugoflogs
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+handlers:
+- url: /_ah/mail/.+
+  script: handlers.handle_incoming_email.app
+  login: admin
+
+- url: /favicon\.ico
+  static_files: favicon.ico
+  upload: favicon\.ico
+
+- url: .*
+  script: handlers.main.app
+
+builtins:
+- deferred: on
+- appstats: on
+
+inbound_services:
+- mail
+
+libraries:
+- name: webapp2
+  version: "latest"
