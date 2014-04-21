@@ -3,8 +3,8 @@
     <li>
         {{log.created_at}} {{log.from_user}}
         <ul>
-            {% for link in log.actual_links %}
-            <li><a href="{{link}}">{{link}}</a></li>
+            {% for name, link in log.names_links %}
+            <li><a href="{{link}}">{{name}}</a></li>
             {% endfor %}
         </ul>
     </li>

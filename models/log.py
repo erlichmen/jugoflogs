@@ -13,3 +13,13 @@ class Log(ndb.Model):
     def actual_links(self):
         for link in self.links:
             yield 'https://storage.googleapis.com' + link
+
+    @property
+    def file_names(self):
+        for link in self.links:
+            parts = link.split('/')
+            yield "/".join(parts[4:])
+
+    @property
+    def names_links(self):
+        return zip(self.file_names, self.actual_links)
