@@ -1,0 +1,12 @@
+<ul>
+    {% for log in logs %}
+    <li>
+        {{log.created_at}} {{log.from_user}}
+        <ul>
+            {% for link in log.actual_links %}
+            <li><a href="{{link}}">{{link}}</a></li>
+            {% endfor %}
+        </ul>
+    </li>
+    {% endfor %}
+</ul>

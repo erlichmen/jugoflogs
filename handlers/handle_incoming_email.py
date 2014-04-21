@@ -12,6 +12,7 @@ import pytz
 import base64
 import zipfile
 import io
+import mimetypes
 
 
 class EmailHandler(webapp2.RequestHandler):
@@ -43,12 +44,11 @@ class EmailHandler(webapp2.RequestHandler):
 
             write_retry_params = gcs.RetryParams(backoff_factor=1.1)
             key_name = "/%s/%s/%s_%s/%s" % (default_bucket, app_name, created_at.isoformat(), salt, name)
-            with gcs.open(key_name, 'w', retry_params=write_retry_params) as gcs_file:
+            content_type = mimetypes.guess_type(key_name)[0]
+            with gcs.open(key_name, 'w', content_type=content_type, options={'x-goog-acl': 'public-read'}, retry_params=write_retry_params) as gcs_file:
                 gcs_file.write(content)
 
-            blobstore_filename = '/gs' + key_name
-
-            return blobstore.create_gs_key(blobstore_filename)
+            return key_name
 
         message = mail.InboundEmailMessage(body)
         salt = create_salt()
