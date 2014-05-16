@@ -7,9 +7,11 @@ import hashlib
 class Log(ndb.Model):
     from_user = ndb.StringProperty(required=True)
     created_at = ndb.DateTimeProperty(required=True)
-    body = ndb.StringProperty(required=True)
+    body = ndb.StringProperty(required=True, indexed=False)
     salt = ndb.StringProperty(required=True)
     links = ndb.StringProperty(repeated=True)
+    message_id = ndb.StringProperty(required=False)
+    parent_id = ndb.StringProperty(required=False)
 
     @property
     def from_user_params(self):

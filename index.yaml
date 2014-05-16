@@ -1,0 +1,6 @@
+indexes:
+- kind: Log
+  properties:
+  - name: parent_id
+  - name: created_at
+    direction: desc

@@ -52,6 +52,8 @@ class EmailHandler(webapp2.RequestHandler):
 
         message = mail.InboundEmailMessage(body)
         salt = create_salt()
+        message_id = message.original.get('Message-Id')
+        parent_id = message.original.get('In-Reply-To')
 
         _, body = message.bodies('text/plain').next()
 
@@ -63,6 +65,8 @@ class EmailHandler(webapp2.RequestHandler):
             from_user=message.sender,
             salt=salt,
             created_at=created_at,
+            message_id=message_id,
+            parent_id=parent_id,
             body=body.decode())
 
         links = []

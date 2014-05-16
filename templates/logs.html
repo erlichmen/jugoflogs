@@ -1,8 +1,8 @@
 <ul>
     {% for log in logs %}
     <li>
-        <img src="{{log.gravatar_url()}}" /> {{log.from_user_display_name}} {{log.created_at}}<br>
-        {{log.body}}
+        <img src="{{log.gravatar_url()}}" />&nbsp;{{log.from_user_display_name}}&nbsp;(<a href="mailto:{{log.from_user_email}}">{{log.from_user_email}}</a>)&nbsp;{{log.created_at}}<br>
+        {{log.body|nl2br|safe}}
         <ul>
             {% for name, link in log.names_links %}
             <li><a href="{{link}}">{{name}}</a></li>
