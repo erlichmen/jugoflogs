@@ -15,6 +15,7 @@ handlers:
 
 - url: .*
   script: handlers.main.app
+  login: admin
 
 builtins:
 - deferred: on
