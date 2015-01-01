@@ -1,0 +1,10 @@
+It worked!
+
+<script>
+    var client = new XMLHttpRequest();
+    client.open('GET', '/foo.txt');
+    client.onreadystatechange = function() {
+        alert(client.responseText);
+    };
+    client.send();
+</script>

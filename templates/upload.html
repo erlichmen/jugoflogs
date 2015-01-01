@@ -1,0 +1,17 @@
+<html>
+  <head>
+    <title>Manual Upload</title>
+  </head>
+  <body>
+    <form action="{{upload_url}}" method="post" enctype="multipart/form-data">
+        <label for="sender">sender:</label>
+     <input type="sender" name="sender" id="sender" value="erlichmen@gmail.com"/><br />
+
+        <label for="body">body:</label>
+     <input type="body" name="body" id="body" value="This is a test" /><br />
+
+        <label for="upload">File:</label> <input type="file" name="upload" id="upload" /><br />
+      <input type="submit" value="Upload File" />
+    </form>
+  </body>
+</html>

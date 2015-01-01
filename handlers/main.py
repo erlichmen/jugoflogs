@@ -1,32 +1,23 @@
 #!/usr/bin/env python
+from google.appengine.ext import ndb
 import webapp2
-import jinja2
+from handlers.base_handler import BaseHandler
 from models import Log
-from webapp2_extras import jinja2
-
-
-def nl2br(value):
-    return value.replace('\n', '<br>\n')
-
-
-class BaseHandler(webapp2.RequestHandler):
-    @webapp2.cached_property
-    def jinja2(self):
-        j2 = jinja2.get_jinja2(app=self.app)
-        j2.environment.filters['nl2br'] = nl2br
-
-        return j2
-
-    def render_template(self, filename, **template_args):
-        self.response.write(self.jinja2.render_template(filename, **template_args))
 
 
 class LogsHandler(BaseHandler):
     def get(self, namespace):
         logs = Log.query(namespace=namespace).order(-Log.created_at)
-        self.render_template('logs.html', logs=logs)
+        self.render_template('logs.html', logs=logs, namespace=namespace)
+
+
+class ViewerHandler(BaseHandler):
+    def get(self, namespace, log_key, name):
+        log = ndb.Key(urlsafe=log_key, namespace=namespace).get()
+        self.render_template('viewer.html', log=log)
 
 
 app = webapp2.WSGIApplication([
+    ('/logs/(.*?)/view/(.*?)/(.*)', ViewerHandler),
     ('/logs/(.*)', LogsHandler)
 ], debug=True)

@@ -1,17 +1,40 @@
+import base64
+import os
 from google.appengine.ext import ndb
-from google.appengine.api import blobstore
 import urllib
 import hashlib
+from datetime import datetime
 
 
 class Log(ndb.Model):
     from_user = ndb.StringProperty(required=True)
     created_at = ndb.DateTimeProperty(required=True)
     body = ndb.StringProperty(required=True, indexed=False)
+
     salt = ndb.StringProperty(required=True)
     links = ndb.StringProperty(repeated=True)
-    message_id = ndb.StringProperty(required=False)
-    parent_id = ndb.StringProperty(required=False)
+
+    message_id = ndb.StringProperty()
+    parent_id = ndb.StringProperty()
+
+    @property
+    def application_name(self):
+        return self.key.namespace()
+
+    @classmethod
+    def create_salt(cls):
+        return base64.urlsafe_b64encode(os.urandom(18))
+
+    @classmethod
+    def create(cls, app_name, sender, body=None, created_at=None, message_id=None, parent_id=None):
+        return cls(
+            namespace=app_name,
+            from_user=sender,
+            salt=cls.create_salt(),
+            created_at=created_at or datetime.utcnow(),
+            message_id=message_id,
+            parent_id=parent_id,
+            body=body.decode())
 
     @property
     def from_user_params(self):

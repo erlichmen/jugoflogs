@@ -4,6 +4,11 @@ runtime: python27
 api_version: 1
 threadsafe: yes
 
+instance_class: F4_1G
+automatic_scaling:
+  max_idle_instances: 1
+  min_pending_latency: 15.0s
+
 handlers:
 - url: /_ah/mail/.+
   script: handlers.handle_incoming_email.app
@@ -13,9 +18,14 @@ handlers:
   static_files: favicon.ico
   upload: favicon\.ico
 
+- url: /upload/.*
+  script: handlers.upload.app
+  secure: always
+
 - url: .*
   script: handlers.main.app
   login: admin
+  secure: always
 
 builtins:
 - deferred: on
