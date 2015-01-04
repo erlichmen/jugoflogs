@@ -31,10 +31,28 @@ class UploadHandler(webapp2.RequestHandler):
 
 class FinishUploadHandler(blobstore_handlers.BlobstoreUploadHandler):
     def post(self, application_name):
+        sender = self.request.get("sender")
+
+        if not sender:
+            sender = self.request.get("email")
+
+        if not sender:
+            sender = self.request.get("username")
+
+        if not sender:
+            sender = self.request.get("facebookId")
+
+        if not sender:
+            sender = self.request.get("fullname")
+
         log = Log.create(
             application_name,
-            self.request.get("sender"),
-            self.request.get("body"))
+            sender,
+            self.request.get("body"),
+            email=self.request.params.get("email"),
+            facebookId=self.request.params.get("facebookId"),
+            fullname=self.request.params.get("fullname"),
+            username=self.request.params.get("username"))
 
         log.links = list(enum_request_files(log, self.get_file_infos()))
 

@@ -6,8 +6,14 @@ import hashlib
 from datetime import datetime
 
 
-class Log(ndb.Model):
+class Log(ndb.Expando):
     from_user = ndb.StringProperty(required=True)
+
+    fullname = ndb.StringProperty(indexed=False)
+    email = ndb.StringProperty()
+    username = ndb.StringProperty()
+    facebookId = ndb.StringProperty()
+
     created_at = ndb.DateTimeProperty(required=True)
     body = ndb.StringProperty(required=True, indexed=False)
 
@@ -26,7 +32,7 @@ class Log(ndb.Model):
         return base64.urlsafe_b64encode(os.urandom(18))
 
     @classmethod
-    def create(cls, app_name, sender, body=None, created_at=None, message_id=None, parent_id=None):
+    def create(cls, app_name, sender, body=None, created_at=None, message_id=None, parent_id=None, **kwargs):
         return cls(
             namespace=app_name,
             from_user=sender,
@@ -34,7 +40,8 @@ class Log(ndb.Model):
             created_at=created_at or datetime.utcnow(),
             message_id=message_id,
             parent_id=parent_id,
-            body=body.decode())
+            body=body.decode(),
+            **kwargs)
 
     @property
     def from_user_params(self):
