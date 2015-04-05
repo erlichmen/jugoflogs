@@ -1,10 +1,25 @@
-It worked!
+<html>
+<head>
+    <link rel="stylesheet" href="/css/codemirror.css">
+</head>
+<script src="/js/codemirror.js"></script>
 
+<body>
+
+</body>
 <script>
-    var client = new XMLHttpRequest();
-    client.open('GET', '/foo.txt');
-    client.onreadystatechange = function() {
-        alert(client.responseText);
-    };
-    client.send();
+
+  var editor = CodeMirror.fromTextArea(myTextarea, {
+    lineNumbers: true
+  });
+
+    function loadfile(input){
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('code').value = e.target.result;
+        }
+
+        reader.readAsText(input.files[0]);
+    }
 </script>
+</html>

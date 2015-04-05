@@ -5,7 +5,7 @@
         {{log.body|nl2br|safe}}
         <ul>
             {% for name, link in log.names_links %}
-            <li><a href="/logs/{{namespace}}/view/{{log.key.urlsafe()}}/{{name}}">{{name}}</a></li>
+                <li><a href="{{link}}">{{name}}</a></li>
             {% endfor %}
         </ul>
     </li>
